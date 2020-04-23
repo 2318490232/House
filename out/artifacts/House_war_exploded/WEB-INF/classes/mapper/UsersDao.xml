@@ -1,0 +1,106 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="cn.Ober.dao.UsersDao">
+
+    <resultMap type="cn.Ober.entity.Users" id="UsersMap">
+        <result property="cardid" column="cardId" jdbcType="VARCHAR"/>
+        <result property="name" column="name" jdbcType="VARCHAR"/>
+        <result property="gender" column="gender" jdbcType="INTEGER"/>
+        <result property="createtime" column="createTime" jdbcType="TIMESTAMP"/>
+        <result property="password" column="password" jdbcType="VARCHAR"/>
+        <result property="status" column="status" jdbcType="INTEGER"/>
+    </resultMap>
+
+    <select id="getByCarId" resultType="int">
+        select
+            status
+        from house.users
+         where cardId = #{cardid}
+
+    </select>
+
+    <!--登录查询-->
+    <select id="Login" resultType="int">
+        select
+            count(1)
+        from house.users
+         where cardId = #{cardid} and password=#{password}
+
+    </select>
+    <!--查询单个(登录操作)-->
+    <select id="queryById" resultMap="UsersMap">
+        select
+          cardId, name, gender, createTime, password, status
+        from house.users
+        where cardId = #{cardid}
+    </select>
+    <!--查询指定行数据-->
+    <select id="queryAllByLimit" resultMap="UsersMap">
+        select
+          cardId, name, gender, createTime, password, status
+        from house.users
+        limit #{offset}, #{limit}
+    </select>
+
+    <!--通过实体作为筛选条件查询-->
+    <select id="queryAll" resultMap="UsersMap">
+        select
+          cardId, name, gender, createTime, password, status
+        from house.users
+        <where>
+            <if test="cardid != null and cardid != ''">
+                and cardId = #{cardid}
+            </if>
+            <if test="name != null and name != ''">
+                and name = #{name}
+            </if>
+            <if test="gender != null">
+                and gender = #{gender}
+            </if>
+            <if test="createtime != null">
+                and createTime = #{createtime}
+            </if>
+            <if test="password != null and password != ''">
+                and password = #{password}
+            </if>
+            <if test="status != null">
+                and status = #{status}
+            </if>
+        </where>
+    </select>
+
+    <!--新增所有列-->
+    <insert id="insert" keyProperty="cardid" useGeneratedKeys="true">
+        insert into house.users(name, gender, createTime, password, status)
+        values (#{name}, #{gender}, #{createtime}, #{password}, #{status})
+    </insert>
+
+    <!--通过主键修改数据-->
+    <update id="update">
+        update house.users
+        <set>
+            <if test="name != null and name != ''">
+                name = #{name},
+            </if>
+            <if test="gender != null">
+                gender = #{gender},
+            </if>
+            <if test="createtime != null">
+                createTime = #{createtime},
+            </if>
+            <if test="password != null and password != ''">
+                password = #{password},
+            </if>
+            <if test="status != null">
+                status = #{status},
+            </if>
+        </set>
+        where cardId = #{cardid}
+    </update>
+
+    <!--通过主键删除-->
+    <delete id="deleteById">
+        delete from house.users where cardId = #{cardid}
+    </delete>
+
+</mapper>

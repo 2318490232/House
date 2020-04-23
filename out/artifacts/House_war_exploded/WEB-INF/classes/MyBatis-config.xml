@@ -1,0 +1,18 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE configuration
+		 PUBLIC "-//mybatis.org//DTD Config 3.0//EN"
+		 "http://mybatis.org/dtd/mybatis-3-config.dtd">
+<configuration>
+	<!-- 设置LogImp -->
+	<settings>
+ 		<setting name="logImpl" value="LOG4J" />
+	</settings>
+	<!-- 配置别名 -->
+ 	<typeAliases>
+ 		<package name="cn.Ober.entity"/>
+ 	</typeAliases>
+ 	<mappers>
+ 		<!-- 自动扫描dao中的映射文件 -->
+ 		<package name="cn.Ober.dao"/>
+ 	</mappers>
+ </configuration>

@@ -1,0 +1,98 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="cn.Ober.dao.RealEstateDao">
+
+    <resultMap type="cn.Ober.entity.RealEstate" id="RealEstateMap">
+        <result property="id" column="id" jdbcType="INTEGER"/>
+        <result property="cardid" column="cardId" jdbcType="VARCHAR"/>
+        <result property="projectname" column="projectName" jdbcType="VARCHAR"/>
+        <result property="address" column="address" jdbcType="VARCHAR"/>
+        <result property="housetype" column="houseType" jdbcType="VARCHAR"/>
+        <result property="area" column="area" jdbcType="INTEGER"/>
+        <result property="buildtime" column="buildTime" jdbcType="OTHER"/>
+    </resultMap>
+
+    <!--查询单个-->
+    <select id="queryById" resultMap="RealEstateMap">
+        select
+          id, cardId, projectName, address, houseType, area, buildTime
+        from house.real_estate
+        where id = #{id}
+    </select>
+
+    <!--查询指定行数据-->
+    <select id="queryAllByLimit" resultMap="RealEstateMap">
+        select
+          id, cardId, projectName, address, houseType, area, buildTime
+        from house.real_estate
+        limit #{offset}, #{limit}
+    </select>
+
+    <!--通过实体作为筛选条件查询-->
+    <select id="queryAll" resultMap="RealEstateMap">
+        select
+          id, cardId, projectName, address, houseType, area, buildTime
+        from house.real_estate
+        <where>
+            <if test="id != null">
+                and id = #{id}
+            </if>
+            <if test="cardid != null and cardid != ''">
+                and cardId = #{cardid}
+            </if>
+            <if test="projectname != null and projectname != ''">
+                and projectName = #{projectname}
+            </if>
+            <if test="address != null and address != ''">
+                and address = #{address}
+            </if>
+            <if test="housetype != null and housetype != ''">
+                and houseType = #{housetype}
+            </if>
+            <if test="area != null">
+                and area = #{area}
+            </if>
+            <if test="buildtime != null">
+                and buildTime = #{buildtime}
+            </if>
+        </where>
+    </select>
+
+    <!--新增所有列-->
+    <insert id="insert" keyProperty="id" useGeneratedKeys="true">
+        insert into house.real_estate(cardId, projectName, address, houseType, area, buildTime)
+        values (#{cardid}, #{projectname}, #{address}, #{housetype}, #{area}, #{buildtime})
+    </insert>
+
+    <!--通过主键修改数据-->
+    <update id="update">
+        update house.real_estate
+        <set>
+            <if test="cardid != null and cardid != ''">
+                cardId = #{cardid},
+            </if>
+            <if test="projectname != null and projectname != ''">
+                projectName = #{projectname},
+            </if>
+            <if test="address != null and address != ''">
+                address = #{address},
+            </if>
+            <if test="housetype != null and housetype != ''">
+                houseType = #{housetype},
+            </if>
+            <if test="area != null">
+                area = #{area},
+            </if>
+            <if test="buildtime != null">
+                buildTime = #{buildtime},
+            </if>
+        </set>
+        where id = #{id}
+    </update>
+
+    <!--通过主键删除-->
+    <delete id="deleteById">
+        delete from house.real_estate where id = #{id}
+    </delete>
+
+</mapper>
